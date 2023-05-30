@@ -5,12 +5,13 @@
     number dw 0
     multiplyer dw 10
     
-    your_number_is_msg db "Your number is $"
-    decimal_msq db "Decimal$"
-    binary_msg db "Binary$"
-    octal_msq db "Octal$"
-    hexadecimal_msq db "Hexadecimal$"
+    your_number_is_msg dw "Your number is $"
+    decimal_msq dw "Decimal$"
+    binary_msg dw "Binary$"
+    octal_msq dw "Octal$"
+    hexadecimal_msq dw "Hexadecimal$"
     
+    number_to_print dw 123
 .code
 main:
     mov ax, @data
@@ -124,7 +125,29 @@ main:
   hexadecimal_calculator:
     jmp resume
   
-; --------------- ;   
+; --------------- ;
+   
+  print_number proc
+    ; prints number inside number_to_print
+    mov ax, number_to_print               
+    mov cx, 00
+   push_to_stack:
+    ; stores digits in stack
+    div multiplyer
+    push dl
+    inc cx
+    mov dx, 00          
+    cmp al, 00
+    jne push_to_stack
+   print:
+    ; prints each digit
+    pop dx
+    add dx, 30h
+    call print_letter
+    loop print  
+    ret
+  print_number endp
+  
   print_msq proc
     mov ah, 9h
     int 21h    
