@@ -6,28 +6,36 @@
     input_number dw 0
     input_number_lenght dw 0
     multiplyer dw 10
+    b_multiplyer dw 2
+    o_multiplyer dw 8
+    h_multiplyer dw 16
     
-    number_to_print dw 123
+    number_to_print dw 0
     
     ; messages
     entrance_msg_1 dw "!!! All input should be in lower case !!!$"
+    
     your_number_is_msg dw "Your number is $"
     decimal_msq dw "Decimal$"
     binary_msg dw "Binary$"
     octal_msq dw "Octal$"
     hexadecimal_msq dw "Hexadecimal$"
     
+    your_number_in_decimal_msg dw "Your number in Decimal:$"
+    your_number_in_binary_msg dw "Your number in Binary:$"
+    your_number_in_octal_msg dw "Your number in Octal:$"
+    your_number_in_hexadecimal_msg dw "Your number in Hexadecimal:$"
+    
 .code
 main:
     mov ax, @data
     mov ds, ax
     mov ax, 00
-    
+  
     mov cx, 00
     
-    call print_entrance
-    jmp get_num
-
+    call print_entrance 
+    
 ; ------- Getting input Jump -------   
   get_num:
     mov ah, 01          ; gets input    (All inputs are lowercase)
@@ -63,28 +71,28 @@ main:
   is_decimal:
     ; prints "Your number is Decimal" in new line
     lea bx, decimal_msq
-    call show_number_type
+    call print_number_type
     ; saves Decimal number in input_number 
     jmp save_decimal
     
   is_binary:
     ; prints "Your number is Binary" in new line
     lea bx, binary_msg
-    call show_number_type
+    call print_number_type
     
     jmp save_binary
      
   is_hexadecimal:
     ; prints "Your number is Hexadecimal" in new line
     lea bx, hexadecimal_msq
-    call show_number_type
+    call print_number_type
     
     jmp save_hexadecimal
     
   is_octal:
     ; prints "Your number is Octal" in new line
     lea bx, octal_msq
-    call show_number_type
+    call print_number_type
     
     jmp save_octal   
   
@@ -171,16 +179,160 @@ main:
 ; ------- Calculation Jumps ------- ;
   
   decimal_calculator:
-    jmp resume
+    mov ax, input_number
+    mov number_to_print, ax
+    
+    ; print number in binary
+    lea dx, your_number_in_binary_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_binary
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter               
+    
+    ; print number in octal
+    lea dx, your_number_in_octal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_octal    
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter
+    
+    ; print number in hexadecimal
+    lea dx, your_number_in_hexadecimal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_hexadecimal
+    
+    jmp end_program
     
   binary_calculator:
-    jmp resume
-                         
-  hexadecimal_calculator:
-    jmp resume
+    mov ax, input_number
+    mov number_to_print, ax
+    
+    ; print number in decimal
+    lea dx, your_number_in_decimal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_decimal
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter               
+    
+    ; print number in octal
+    lea dx, your_number_in_octal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_octal    
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter
+    
+    ; print number in hexadecimal
+    lea dx, your_number_in_hexadecimal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_hexadecimal
+    
+    jmp end_program
     
   octal_calculator:
-    jmp resume
+    mov ax, input_number
+    mov number_to_print, ax
+    
+    ; print number in decimal
+    lea dx, your_number_in_decimal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_decimal
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter               
+    
+    ; print number in binary
+    lea dx, your_number_in_binary_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_binary    
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter
+    
+    ; print number in hexadecimal
+    lea dx, your_number_in_hexadecimal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_hexadecimal
+    
+    jmp end_program          
+    
+  hexadecimal_calculator:
+    mov ax, input_number
+    mov number_to_print, ax
+    
+    ; print number in decimal
+    lea dx, your_number_in_decimal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_decimal
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter               
+    
+    ; print number in binary
+    lea dx, your_number_in_binary_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_binary    
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
+    call print_letter
+    
+    ; print number in octal
+    lea dx, your_number_in_octal_msg
+    call print_msg
+    mov dx, 09h
+    call print_letter
+    call print_in_octal
+    
+    jmp end_program
   
 ; ------- Calculation Procedures ------- ;
 
@@ -206,8 +358,9 @@ main:
 ; ------- Printing Procedures ------- ;
 
   print_entrance proc
+    ; Prints entranve message on screen 
     lea dx, entrance_msg_1 
-    call print_msq 
+    call print_msg 
     mov dx, 0xdh
     call print_letter
     mov dx, 0xah
@@ -216,10 +369,11 @@ main:
     ret
   print_entrance endp  
    
-  print_number proc
-    ; prints number inside number_to_print
+  print_in_decimal proc
+    ; prints number_to_print in decimal
     mov ax, number_to_print               
-    mov cx, 00
+    mov cx, 00 
+    mov dx, 00
    push_to_stack:
     ; stores digits in stack
     div multiplyer
@@ -228,36 +382,115 @@ main:
     mov dx, 00          
     cmp al, 00
     jne push_to_stack
-   print:
+   print_d:
     ; prints each digit
     pop dx
     add dx, 30h
     call print_letter
-    loop print  
+    loop print_d  
     ret
-  print_number endp
+  print_in_decimal endp
   
-  show_number_type proc
-    ; prints inputed number type
-    mov dx, 0xdh
+  print_in_binary proc
+    ; prints inside number_to_print in binary
+    mov ax, number_to_print               
+    mov cx, 00
+    mov dx, 00
+   push_to_stack_b:
+    ; stores digits in stack
+    div b_multiplyer
+    push dx
+    inc cx
+    mov dx, 00          
+    cmp al, 00
+    jne push_to_stack_b
+   print_b:
+    ; prints each digit
+    pop dx
+    add dx, 30h
     call print_letter
+    loop print_b  
+    ret
+  print_in_binary endp                     
+                      
+  print_in_octal proc
+    ; prints inside number_to_print in octal
+    mov ax, number_to_print               
+    mov cx, 00
+    mov dx, 00
+   push_to_stack_o:
+    ; stores digits in stack
+    div o_multiplyer
+    push dx
+    inc cx
+    mov dx, 00          
+    cmp al, 00
+    jne push_to_stack_o
+   print_o:
+    ; prints each digit
+    pop dx
+    add dx, 30h
+    call print_letter
+    loop print_o  
+    ret
+  print_in_octal endp                    
+                     
+  print_in_hexadecimal proc
+    ; prints inside number_to_print in octal
+    mov ax, number_to_print               
+    mov cx, 00 
+    mov dx, 00
+   push_to_stack_h:
+    ; stores digits in stack
+    div h_multiplyer
+    push dx
+    inc cx
+    mov dx, 00          
+    cmp al, 00
+    jne push_to_stack_h
+   print_h:
+    ; prints each digit
+    pop dx
+    add dx, 30h
+    cmp dx, 3ah
+    jae print_alphabet
+    call print_letter
+    loop print_h  
+    ret
+   print_alphabet:
+    add dx, 27h
+    call print_letter
+    loop print_h
+    ret
+  print_in_hexadecimal endp
+  
+  print_number_type proc
+    ; prints inputed number type
+    ; mov to next lines first column
     mov dx, 0xah
     call print_letter
+    mov dx, 0xdh
+    call print_letter
+    
     lea dx, your_number_is_msg
-    call print_msq
+    call print_msg
     mov dx, bx
-    call print_msq
-    mov dx, 9h
+    call print_msg
+    
+    ; mov to next lines first column
+    mov dx, 0xah
+    call print_letter
+    mov dx, 0xdh
     call print_letter
     
     ret
-  show_number_type endp
+  print_number_type endp
   
-  print_msq proc
+  print_msg proc
     mov ah, 9h
     int 21h    
     ret 
-  print_msq endp
+  print_msg endp
   
   print_letter proc
     mov ah, 2h
@@ -267,5 +500,5 @@ main:
   
 ; --------------- ;
     
-  resume:
+  end_program:
     end  
