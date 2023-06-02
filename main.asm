@@ -45,8 +45,6 @@ main:
     je is_decimal
     cmp al, 62h         ; checks if input is Binary
     je is_binary        
-    cmp al, 64h         ; checks if input is Decimal
-    je is_decimal
     cmp al, 68h         ; checks if input is Hexadecimal
     je is_hexadecimal
     cmp al, 6fh         ; checks if input is Octal
