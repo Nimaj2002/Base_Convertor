@@ -5,6 +5,9 @@
     ; variables
     input_number dw 0
     input_number_length dw 0
+    is_signed db 0
+    
+    ; multiplyers
     d_multiplyer dw 10
     b_multiplyer dw 2
     o_multiplyer dw 8
@@ -39,6 +42,9 @@ main:
     mov ah, 01          ; gets input    (All inputs are lowercase)
     int 21h
     
+    cmp al, 2dh
+    mov is_signed, 1
+    je get_num
     cmp al, 8h          ; checks if user wants to delete the input
     je delete_last_input
     cmp al, 0xdh        ; checks if input is enter or not (entered number is Decimal)
@@ -153,7 +159,7 @@ main:
     mov cx, 00
    save_d:
     cmp cx, input_number_length
-    je decimal_calculator
+    je check_sign
     mov ax, d_multiplyer
     push cx
     call power
@@ -165,7 +171,17 @@ main:
     mov input_number, ax
     inc cx 
     jmp save_d
-
+   check_sign:
+    ; if number is signed multiply input_number to -1
+    mov ax, 00
+    mov al, is_signed
+    cmp al, 1
+    jne decimal_calculator 
+    mov ax, input_number
+    neg ax
+    mov input_number, ax
+    jmp decimal_calculator 
+    
   save_binary:
     ; saving number in input_number in Binary
     mov dx, 00
