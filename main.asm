@@ -5,21 +5,19 @@
     ; variables
     input_number dw 0
     input_number_length dw 0
-    multiplyer dw 10
+    d_multiplyer dw 10
     b_multiplyer dw 2
     o_multiplyer dw 8
     h_multiplyer dw 16
-    
-    number_to_print dw 0
     
     ; messages
     entrance_msg_1 dw "!!! All input should be in lower case !!!$"
     
     your_number_is_msg dw "Your number is $"
-    decimal_msq dw "Decimal$"
+    decimal_msg dw "Decimal$"
     binary_msg dw "Binary$"
-    octal_msq dw "Octal$"
-    hexadecimal_msq dw "Hexadecimal$"
+    octal_msg dw "Octal$"
+    hexadecimal_msg dw "Hexadecimal$"
     
     your_number_in_decimal_msg dw "Your number in Decimal:$"
     your_number_in_binary_msg dw "Your number in Binary:$"
@@ -79,7 +77,7 @@ main:
                                
   is_decimal:
     ; prints "Your number is Decimal" in new line
-    lea bx, decimal_msq
+    lea bx, decimal_msg
     call print_number_type
     ; saves Decimal number in input_number 
     jmp save_decimal
@@ -93,14 +91,14 @@ main:
      
   is_hexadecimal:
     ; prints "Your number is Hexadecimal" in new line
-    lea bx, hexadecimal_msq
+    lea bx, hexadecimal_msg
     call print_number_type
     
     jmp save_hexadecimal
     
   is_octal:
     ; prints "Your number is Octal" in new line
-    lea bx, octal_msq
+    lea bx, octal_msg
     call print_number_type
     
     jmp save_octal   
@@ -145,7 +143,7 @@ main:
    save_d:
     cmp cx, input_number_length
     je decimal_calculator
-    mov ax, multiplyer
+    mov ax, d_multiplyer
     push cx
     call power
     pop cx
@@ -164,7 +162,7 @@ main:
    save_b:
     cmp cx, input_number_length
     je binary_calculator
-    mov ax, 2
+    mov ax, b_multiplyer
     push cx
     call power
     pop cx
@@ -183,7 +181,7 @@ main:
    save_h:
     cmp cx, input_number_length
     je hexadecimal_calculator
-    mov ax, 16
+    mov ax, h_multiplyer
     push cx
     call power
     pop cx
@@ -202,7 +200,7 @@ main:
    save_o:
     cmp cx, input_number_length
     je octal_calculator
-    mov ax, 8
+    mov ax, o_multiplyer
     push cx
     call power
     pop cx
@@ -219,8 +217,6 @@ main:
 ; ------- Calculation Jumps ------- ;
   
   decimal_calculator:
-    mov ax, input_number
-    mov number_to_print, ax
     
     ; print number in binary
     lea dx, your_number_in_binary_msg
@@ -258,8 +254,6 @@ main:
     jmp end_program
     
   binary_calculator:
-    mov ax, input_number
-    mov number_to_print, ax
     
     ; print number in decimal
     lea dx, your_number_in_decimal_msg
@@ -297,8 +291,6 @@ main:
     jmp end_program
     
   octal_calculator:
-    mov ax, input_number
-    mov number_to_print, ax
     
     ; print number in decimal
     lea dx, your_number_in_decimal_msg
@@ -336,8 +328,6 @@ main:
     jmp end_program          
     
   hexadecimal_calculator:
-    mov ax, input_number
-    mov number_to_print, ax
     
     ; print number in decimal
     lea dx, your_number_in_decimal_msg
@@ -411,12 +401,12 @@ main:
    
   print_in_decimal proc
     ; prints number_to_print in decimal
-    mov ax, number_to_print               
+    mov ax, input_number               
     mov cx, 00 
     mov dx, 00
    push_to_stack:
     ; stores digits in stack
-    div multiplyer
+    div d_multiplyer
     push dx
     inc cx
     mov dx, 00          
@@ -433,7 +423,7 @@ main:
   
   print_in_binary proc
     ; prints inside number_to_print in binary
-    mov ax, number_to_print               
+    mov ax, input_number               
     mov cx, 00
     mov dx, 00
    push_to_stack_b:
@@ -455,7 +445,7 @@ main:
                       
   print_in_octal proc
     ; prints inside number_to_print in octal
-    mov ax, number_to_print               
+    mov ax, input_number                
     mov cx, 00
     mov dx, 00
    push_to_stack_o:
@@ -477,7 +467,7 @@ main:
                      
   print_in_hexadecimal proc
     ; prints inside number_to_print in octal
-    mov ax, number_to_print               
+    mov ax, input_number                
     mov cx, 00 
     mov dx, 00
    push_to_stack_h:
