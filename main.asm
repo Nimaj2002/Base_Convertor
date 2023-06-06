@@ -4,7 +4,7 @@
     
     ; variables
     input_number dw 0
-    input_number_lenght dw 0
+    input_number_length dw 0
     multiplyer dw 10
     b_multiplyer dw 2
     o_multiplyer dw 8
@@ -42,13 +42,8 @@ main:
     int 21h
     
     cmp al, 0xdh        ; checks if input is enter or not (entered number is Decimal)
-    je is_decimal
-    cmp al, 62h         ; checks if input is Binary
-    je is_binary        
-    cmp al, 68h         ; checks if input is Hexadecimal
-    je is_hexadecimal
-    cmp al, 6fh         ; checks if input is Octal
-    je is_octal
+    je check_base_type    
+        
     
     mov ah, 00
     sub al, 30h
@@ -56,15 +51,31 @@ main:
     cmp al, 30h         ; saving hexadecimals
     jna save_to_stack
     sub al, 31h
-    add al, 0xah
+    add al, 0xah  
     
    save_to_stack:
     push ax
-    inc input_number_lenght
-    jmp get_num
-    
+    inc input_number_length
+    jmp get_num  
   
 ; ------- Number Type Jumps ------- ;       
+  
+  check_base_type:
+    ; check number's base
+    pop ax
+    
+    cmp al, 0dh         ; checks if input is decimal with letter 'd' indicator
+    je decimal_indicator
+    cmp al, 0bh         ; checks if input is Binary
+    je binary_indicator        
+    cmp al, 11h         ; checks if input is Hexadecimal
+    je hexadecimal_indicator
+    cmp al, 18h         ; checks if input is Octal
+    je octal_indicator
+    
+    cmp al, 0           ; checks if input is decimal without letter 'd' indicator
+    jge check_smaller
+    jnge not_greater
                                
   is_decimal:
     ; prints "Your number is Decimal" in new line
@@ -93,6 +104,37 @@ main:
     call print_number_type
     
     jmp save_octal   
+
+; ------- Comparing Jumps ------- ; 
+  check_smaller:
+    ; checks if number is less than 9
+    cmp al, 9
+    push ax
+    jle is_decimal
+  
+  not_greater:
+    ; pushes the popped number back to stack 
+    push ax
+  
+  decimal_indicator:
+    ; checks 'd' character in the input
+    sub input_number_length, 1
+    jmp is_decimal
+    
+  binary_indicator:
+    ; checks 'b' character in the input
+    sub input_number_length, 1
+    jmp is_binary
+  
+  hexadecimal_indicator:
+    ; checks 'h' character in the input
+    sub input_number_length, 1
+    jmp is_hexadecimal
+  
+  octal_indicator:
+    ; checks 'h' character in the input
+    sub input_number_length, 1
+    jmp is_octal                    
   
 ; ------- Saving jumps ------- ;
                   
@@ -101,7 +143,7 @@ main:
     mov dx, 00
     mov cx, 00
    save_d:
-    cmp cx, input_number_lenght
+    cmp cx, input_number_length
     je decimal_calculator
     mov ax, multiplyer
     push cx
@@ -120,7 +162,7 @@ main:
     mov dx, 00
     mov cx, 00
    save_b:
-    cmp cx, input_number_lenght
+    cmp cx, input_number_length
     je binary_calculator
     mov ax, 2
     push cx
@@ -139,7 +181,7 @@ main:
     mov dx, 00
     mov cx, 00
    save_h:
-    cmp cx, input_number_lenght
+    cmp cx, input_number_length
     je hexadecimal_calculator
     mov ax, 16
     push cx
@@ -158,7 +200,7 @@ main:
     mov dx, 00
     mov cx, 00
    save_o:
-    cmp cx, input_number_lenght
+    cmp cx, input_number_length
     je octal_calculator
     mov ax, 8
     push cx
@@ -499,4 +541,5 @@ main:
 ; --------------- ;
     
   end_program:
-    end  
+    end 
+    
