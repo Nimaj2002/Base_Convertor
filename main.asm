@@ -42,21 +42,13 @@ main:
     mov ah, 01          ; gets input    (All inputs are lowercase)
     int 21h
     
-<<<<<<< HEAD
-<<<<<<< HEAD
     cmp al, 2dh
-    mov is_signed, 1
-    je get_num
+    je change_sign
     cmp al, 8h          ; checks if user wants to delete the input
     je delete_last_input
-=======
->>>>>>> parent of a2283b3 (a label to delete inputed number added)
-=======
->>>>>>> parent of a2283b3 (a label to delete inputed number added)
     cmp al, 0xdh        ; checks if input is enter or not (entered number is Decimal)
     je check_base_type    
         
-    
     mov ah, 00
     sub al, 30h
     
@@ -69,7 +61,18 @@ main:
     push ax
     inc input_number_length
     jmp get_num  
-  
+
+   delete_last_input:
+    pop dx
+    mov dx, 00
+    call print_letter
+    mov dx, 8h
+    call print_letter
+    dec input_number_length
+    jmp get_num
+   change_sign:
+    mov is_signed, 1
+    je get_num
 ; ------- Number Type Jumps ------- ;       
   
   check_base_type:
@@ -118,6 +121,7 @@ main:
     jmp save_octal   
 
 ; ------- Comparing Jumps ------- ; 
+
   check_smaller:
     ; checks if number is less than 9
     cmp al, 9
@@ -234,10 +238,8 @@ main:
     add ax, input_number
     mov input_number, ax
     inc cx 
-    jmp save_o  
-  
-                  
-                  
+    jmp save_o 
+                      
 ; ------- Calculation Jumps ------- ;
   
   decimal_calculator:
