@@ -1,7 +1,7 @@
-# Number Converter
-A Number Converter with Assembly for 8086 processors using EMU8086
+# Base Convertor
+A Number Base Convertor with Assembly for 8086 processors using EMU8086
 
-#### Supported Number Types :
+#### Supported Number Base Types :
 - [x] Decimal
   - signed
   - unsigned
