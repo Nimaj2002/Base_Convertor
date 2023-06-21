@@ -43,11 +43,14 @@ main:
     int 21h
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     cmp al, 2dh
     mov is_signed, 1
     je get_num
     cmp al, 8h          ; checks if user wants to delete the input
     je delete_last_input
+=======
+>>>>>>> parent of a2283b3 (a label to delete inputed number added)
 =======
 >>>>>>> parent of a2283b3 (a label to delete inputed number added)
     cmp al, 0xdh        ; checks if input is enter or not (entered number is Decimal)
